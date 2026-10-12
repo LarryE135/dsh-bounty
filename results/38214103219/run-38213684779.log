@@ -1,0 +1,235 @@
+===== route/10_Post Run actions_checkout@v4.txt
+﻿2026-10-12T06:40:46.0628405Z Post job cleanup.
+2026-10-12T06:40:46.1141404Z [command]/usr/bin/git version
+2026-10-12T06:40:46.1172146Z git version 2.55.0
+2026-10-12T06:40:46.1196048Z Temporarily overriding HOME='/home/runner/work/_temp/60a6763e-9268-4d94-a2c3-20dcde11dbd3' before making global git config changes
+2026-10-12T06:40:46.1196701Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T06:40:46.1199677Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dsh-bounty/dsh-bounty
+2026-10-12T06:40:46.1227136Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T06:40:46.1253040Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T06:40:46.1439717Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T06:40:46.1467452Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T06:40:46.1686027Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T06:40:46.1725049Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+
+===== route/11_Complete job.txt
+﻿2026-10-12T06:40:46.2032208Z Cleaning up orphan processes
+2026-10-12T06:40:46.2208310Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+===== route/1_Set up job.txt
+﻿2026-10-12T06:40:33.8496507Z Current runner version: '2.337.0'
+2026-10-12T06:40:33.8512161Z ##[group]Runner Image Provisioner
+2026-10-12T06:40:33.8512753Z Hosted Compute Agent
+2026-10-12T06:40:33.8513091Z Version: 20261002.596
+2026-10-12T06:40:33.8513490Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-12T06:40:33.8513914Z Build Date: 2026-10-02T22:28:27Z
+2026-10-12T06:40:33.8514359Z Worker ID: {bca9a734-55c5-48f1-9722-ca02c8eb9685}
+2026-10-12T06:40:33.8514815Z Region: westus3
+2026-10-12T06:40:33.8515172Z Cloud: Azure
+2026-10-12T06:40:33.8515508Z ##[endgroup]
+2026-10-12T06:40:33.8516249Z ##[group]Operating System
+2026-10-12T06:40:33.8516626Z Ubuntu
+2026-10-12T06:40:33.8516971Z 24.04.5
+2026-10-12T06:40:33.8517267Z LTS
+2026-10-12T06:40:33.8517572Z ##[endgroup]
+2026-10-12T06:40:33.8517934Z ##[group]Runner Image
+2026-10-12T06:40:33.8518330Z Image: ubuntu-24.04
+2026-10-12T06:40:33.8518691Z Version: 20261004.327.1
+2026-10-12T06:40:33.8519278Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-12T06:40:33.8520425Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-12T06:40:33.8521013Z ##[endgroup]
+2026-10-12T06:40:33.8521759Z ##[group]GITHUB_TOKEN Permissions
+2026-10-12T06:40:33.8523080Z Contents: read
+2026-10-12T06:40:33.8523461Z Issues: write
+2026-10-12T06:40:33.8523811Z Metadata: read
+2026-10-12T06:40:33.8524124Z PullRequests: read
+2026-10-12T06:40:33.8524497Z ##[endgroup]
+2026-10-12T06:40:33.8525675Z Secret source: Actions
+2026-10-12T06:40:33.8526248Z Cache mode: read
+2026-10-12T06:40:33.8526660Z Prepare workflow directory
+2026-10-12T06:40:33.8748214Z Prepare all required actions
+2026-10-12T06:40:33.8777072Z Getting action download info
+2026-10-12T06:40:34.1585944Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-12T06:40:34.2240030Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-12T06:40:34.5101636Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-12T06:40:34.9098800Z Complete job name: route
+
+===== route/2_Run actions_checkout@v4.txt
+﻿2026-10-12T06:40:34.9583509Z ##[group]Run actions/checkout@v4
+2026-10-12T06:40:34.9583955Z with:
+2026-10-12T06:40:34.9584219Z   persist-credentials: false
+2026-10-12T06:40:34.9584517Z   repository: LarryE135/dsh-bounty
+2026-10-12T06:40:34.9586601Z   token: ***
+2026-10-12T06:40:34.9586848Z   ssh-strict: true
+2026-10-12T06:40:34.9587106Z   ssh-user: git
+2026-10-12T06:40:34.9587348Z   clean: true
+2026-10-12T06:40:34.9587603Z   sparse-checkout-cone-mode: true
+2026-10-12T06:40:34.9587904Z   fetch-depth: 1
+2026-10-12T06:40:34.9588149Z   fetch-tags: false
+2026-10-12T06:40:34.9588403Z   show-progress: true
+2026-10-12T06:40:34.9588658Z   lfs: false
+2026-10-12T06:40:34.9588925Z   submodules: false
+2026-10-12T06:40:34.9589201Z   set-safe-directory: true
+2026-10-12T06:40:34.9589489Z   allow-unsafe-pr-checkout: false
+2026-10-12T06:40:34.9590086Z env:
+2026-10-12T06:40:34.9590350Z   PYTHONUTF8: 1
+2026-10-12T06:40:34.9590607Z   PYTHONIOENCODING: utf-8
+2026-10-12T06:40:34.9590880Z ##[endgroup]
+2026-10-12T06:40:35.0203367Z Syncing repository: LarryE135/dsh-bounty
+2026-10-12T06:40:35.0204999Z ##[group]Getting Git version info
+2026-10-12T06:40:35.0205702Z Working directory is '/home/runner/work/dsh-bounty/dsh-bounty'
+2026-10-12T06:40:35.0206623Z [command]/usr/bin/git version
+2026-10-12T06:40:35.0262621Z git version 2.55.0
+2026-10-12T06:40:35.0280773Z ##[endgroup]
+2026-10-12T06:40:35.0285094Z Temporarily overriding HOME='/home/runner/work/_temp/b05638e8-be28-4380-8d4f-5d5fb5885a4f' before making global git config changes
+2026-10-12T06:40:35.0286415Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T06:40:35.0288932Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dsh-bounty/dsh-bounty
+2026-10-12T06:40:35.0374443Z Deleting the contents of '/home/runner/work/dsh-bounty/dsh-bounty'
+2026-10-12T06:40:35.0377807Z ##[group]Initializing the repository
+2026-10-12T06:40:35.0381347Z [command]/usr/bin/git init /home/runner/work/dsh-bounty/dsh-bounty
+2026-10-12T06:40:35.0675350Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T06:40:35.0677196Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T06:40:35.0678314Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T06:40:35.0679151Z hint: call:
+2026-10-12T06:40:35.0679831Z hint:
+2026-10-12T06:40:35.0680477Z hint: 	git config --global init.defaultBranch <name>
+2026-10-12T06:40:35.0681188Z hint:
+2026-10-12T06:40:35.0681858Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T06:40:35.0682866Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T06:40:35.0683659Z hint:
+2026-10-12T06:40:35.0684198Z hint: 	git branch -m <name>
+2026-10-12T06:40:35.0684818Z hint:
+2026-10-12T06:40:35.0685533Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T06:40:35.0686870Z Initialized empty Git repository in /home/runner/work/dsh-bounty/dsh-bounty/.git/
+2026-10-12T06:40:35.0689053Z [command]/usr/bin/git remote add origin https://github.com/LarryE135/dsh-bounty
+2026-10-12T06:40:35.0862850Z ##[endgroup]
+2026-10-12T06:40:35.0863603Z ##[group]Disabling automatic garbage collection
+2026-10-12T06:40:35.0865776Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-12T06:40:35.0962953Z ##[endgroup]
+2026-10-12T06:40:35.0963635Z ##[group]Setting up auth
+2026-10-12T06:40:35.0967523Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T06:40:35.0993996Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T06:40:35.1274290Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T06:40:35.1300895Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T06:40:35.1461890Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T06:40:35.1487643Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T06:40:35.1649036Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-12T06:40:35.1868420Z ##[endgroup]
+2026-10-12T06:40:35.1874285Z ##[group]Fetching the repository
+2026-10-12T06:40:35.1875766Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +af41c0738c22be1371b95e4591245dd63a2e074a:refs/remotes/origin/main
+2026-10-12T06:40:35.7167115Z From https://github.com/LarryE135/dsh-bounty
+2026-10-12T06:40:35.7168873Z  * [new ref]         af41c0738c22be1371b95e4591245dd63a2e074a -> origin/main
+2026-10-12T06:40:35.7171913Z ##[endgroup]
+2026-10-12T06:40:35.7173032Z ##[group]Determining the checkout info
+2026-10-12T06:40:35.7174136Z ##[endgroup]
+2026-10-12T06:40:35.7174819Z [command]/usr/bin/git sparse-checkout disable
+2026-10-12T06:40:35.7362303Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-12T06:40:35.7555890Z ##[group]Checking out the ref
+2026-10-12T06:40:35.7557374Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-12T06:40:35.7806566Z Switched to a new branch 'main'
+2026-10-12T06:40:35.7811557Z branch 'main' set up to track 'origin/main'.
+2026-10-12T06:40:35.7815864Z ##[endgroup]
+2026-10-12T06:40:35.7845718Z [command]/usr/bin/git log -1 --format=%H
+2026-10-12T06:40:35.7867157Z af41c0738c22be1371b95e4591245dd63a2e074a
+2026-10-12T06:40:35.7874492Z ##[group]Removing auth
+2026-10-12T06:40:35.7876733Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T06:40:35.7901470Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T06:40:35.8065613Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T06:40:35.8087480Z http.https://github.com/.extraheader
+2026-10-12T06:40:35.8093101Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-12T06:40:35.8162862Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T06:40:35.8322649Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T06:40:35.8345888Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T06:40:35.8506599Z ##[endgroup]
+
+===== route/3_Run actions_setup-python@v5.txt
+﻿2026-10-12T06:40:35.8937414Z ##[group]Run actions/setup-python@v5
+2026-10-12T06:40:35.8938101Z with:
+2026-10-12T06:40:35.8938587Z   python-version: 3.12
+2026-10-12T06:40:35.8939144Z   check-latest: false
+2026-10-12T06:40:35.8944397Z   token: ***
+2026-10-12T06:40:35.8944917Z   update-environment: true
+2026-10-12T06:40:35.8945526Z   allow-prereleases: false
+2026-10-12T06:40:35.8946116Z   freethreaded: false
+2026-10-12T06:40:35.8946806Z env:
+2026-10-12T06:40:35.8947397Z   PYTHONUTF8: 1
+2026-10-12T06:40:35.8947933Z   PYTHONIOENCODING: utf-8
+2026-10-12T06:40:35.8948505Z ##[endgroup]
+2026-10-12T06:40:35.9756165Z ##[group]Installed versions
+2026-10-12T06:40:36.0301235Z (node:2149) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T06:40:36.0303046Z Successfully set up CPython (3.12.15)
+2026-10-12T06:40:36.0304613Z ##[endgroup]
+2026-10-12T06:40:36.0324829Z (Use `node --trace-deprecation ...` to show where the warning was created)
+
+===== route/4_路由（issue_comment 命令 ／ schedule 超时回板）.txt
+﻿2026-10-12T06:40:36.0981966Z ##[group]Run python -X utf8 scripts/bounty_board.py \
+2026-10-12T06:40:36.0982976Z [36;1mpython -X utf8 scripts/bounty_board.py \[0m
+2026-10-12T06:40:36.0983798Z [36;1m  --event-file "$GITHUB_EVENT_PATH" \[0m
+2026-10-12T06:40:36.0984511Z [36;1m  --apply \[0m
+2026-10-12T06:40:36.0985191Z [36;1m  --ledger-out "$RUNNER_TEMP/bounty_events.jsonl"[0m
+2026-10-12T06:40:36.1980565Z shell: /usr/bin/bash -e {0}
+2026-10-12T06:40:36.1981193Z env:
+2026-10-12T06:40:36.1981661Z   PYTHONUTF8: 1
+2026-10-12T06:40:36.1982189Z   PYTHONIOENCODING: utf-8
+2026-10-12T06:40:36.1982913Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:36.1983942Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-12T06:40:36.1984959Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:36.1985891Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:36.1986835Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:36.1987801Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-12T06:40:36.1992921Z   BOUNTY_GH_TOKEN: ***
+2026-10-12T06:40:36.1993460Z ##[endgroup]
+2026-10-12T06:40:44.9917182Z 命令 `/claim` · 触发者 @LarryE135 · 维护者=True · 并发认领=1 · 当前态 bounty:open
+2026-10-12T06:40:44.9917578Z APPLY #22 open → claimed ｜ @LarryE135 认领，锁至 2026-10-15T06:40:38Z
+2026-10-12T06:40:44.9917845Z 本批事件 1 条 → /home/runner/work/_temp/bounty_events.jsonl
+
+===== route/5_本批账本事件（artifact；供维护者并入账本）.txt
+﻿2026-10-12T06:40:45.0058698Z ##[group]Run actions/upload-artifact@v4
+2026-10-12T06:40:45.0058867Z with:
+2026-10-12T06:40:45.0058985Z   name: bounty-ledger-events
+2026-10-12T06:40:45.0059142Z   path: /home/runner/work/_temp/bounty_events.jsonl
+2026-10-12T06:40:45.0059312Z   if-no-files-found: ignore
+2026-10-12T06:40:45.0059444Z   retention-days: 90
+2026-10-12T06:40:45.0059562Z   compression-level: 6
+2026-10-12T06:40:45.0059952Z   overwrite: false
+2026-10-12T06:40:45.0060070Z   include-hidden-files: false
+2026-10-12T06:40:45.0060196Z env:
+2026-10-12T06:40:45.0060297Z   PYTHONUTF8: 1
+2026-10-12T06:40:45.0060420Z   PYTHONIOENCODING: utf-8
+2026-10-12T06:40:45.0060611Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:45.0060841Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-12T06:40:45.0061066Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:45.0061270Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:45.0061471Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-12T06:40:45.0061699Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-12T06:40:45.0061869Z ##[endgroup]
+2026-10-12T06:40:45.1049754Z (node:2162) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T06:40:45.1050437Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-12T06:40:45.1077136Z With the provided path, there will be 1 file uploaded
+2026-10-12T06:40:45.1080675Z Artifact name is valid!
+2026-10-12T06:40:45.1081255Z Root directory input is valid!
+2026-10-12T06:40:45.4496907Z Beginning upload of artifact content to blob storage
+2026-10-12T06:40:45.4597252Z (node:2162) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-12T06:40:45.6754594Z Uploaded bytes 344
+2026-10-12T06:40:45.7358410Z Finished uploading artifact content to blob storage!
+2026-10-12T06:40:45.7358950Z SHA256 digest of uploaded artifact zip is b3608d25d0c2f64e6999aec64da71442a61b44b36f820fd923ae4a6f09558767
+2026-10-12T06:40:45.7360950Z Finalizing artifact upload
+2026-10-12T06:40:45.9690968Z Artifact bounty-ledger-events.zip successfully finalized. Artifact ID 11730720146
+2026-10-12T06:40:45.9691605Z Artifact bounty-ledger-events has been successfully uploaded! Final size is 344 bytes. Artifact ID is 11730720146
+2026-10-12T06:40:45.9694788Z Artifact download URL: https://github.com/LarryE135/dsh-bounty/actions/runs/38213684779/artifacts/11730720146
+
+===== route/9_Post Run actions_setup-python@v5.txt
+﻿2026-10-12T06:40:45.9813480Z Post job cleanup.
+2026-10-12T06:40:46.0509884Z (node:2175) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T06:40:46.0510327Z (Use `node --trace-deprecation ...` to show where the warning was created)
+
+===== route/system.txt
+2026-10-12T06:40:31.6180000Z Evaluating route.if
+2026-10-12T06:40:31.6180000Z Evaluating: (success() && (((github.event_name != 'issue_comment') || (github.event.issue.pull_request == null))))
+2026-10-12T06:40:31.6180000Z Expanded: (true && (('issue_comment' != 'issue_comment') || (null == null)))
+2026-10-12T06:40:31.6180000Z Result: true
+2026-10-12T06:40:31.6190000Z Requested labels: ubuntu-latest
+2026-10-12T06:40:31.6190000Z Job defined at: LarryE135/dsh-bounty/.github/workflows/bounty.yml@refs/heads/main
+2026-10-12T06:40:31.6190000Z Waiting for a runner to pick up this job...
+2026-10-12T06:40:31.8000000Z Job is waiting for a hosted runner to come online.
+2026-10-12T06:40:31.8000000Z Job is about to start running on the hosted runner: GitHub Actions 1000000250

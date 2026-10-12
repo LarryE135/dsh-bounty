@@ -1,0 +1,92 @@
+{
+ "number": 19,
+ "state": "open",
+ "labels": [
+  "bounty",
+  "bounty:disputed",
+  "difficulty:hard"
+ ],
+ "comments": [
+  {
+   "id": 6119004854,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:29:38Z",
+   "len": 6,
+   "head": "/claim",
+   "tail": "/claim"
+  },
+  {
+   "id": 6119008075,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T06:29:56Z",
+   "len": 349,
+   "head": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T06:29:50Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T06:29:50Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"",
+   "tail": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T06:29:50Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T06:29:50Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T06:29:50Z\"} -->"
+  },
+  {
+   "id": 6119011972,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:30:15Z",
+   "len": 65409,
+   "head": "/dispute xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "tail": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "id": 6119015420,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T06:30:31Z",
+   "len": 65701,
+   "head": "**[悬赏板] 已进入争议**\n\n- 提起者：@LarryE135\n- 理由：xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "tail": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n- 已转 `bounty:disputed`：由维护者仲裁并留痕（记录在案，不扣本金）\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"dispute\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T06:29:50Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":2,\"state\":\"disputed\",\"ts\":\"2026-10-12T06:30:27Z\"} -->"
+  },
+  {
+   "id": 6119019340,
+   "user": "michaelwoolum50-cmyk",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T06:30:52Z",
+   "len": 1129,
+   "head": "## Proposed fix\n\nThe issue seems to be related to the handling of the `/dispute` endpoint in the `rM-M2` branch of the `LarryE135/dsh-bounty` repository. The problem is that the response is truncated, and the label is changed but the tag is not updated.\n\nHere is a potential patch to fix the issue:\n\n",
+   "tail": "ute, include: [:tags], status: :ok\n     else\n       render json: { error: 'Dispute not found' }, status: :not_found\n     end\n   end\n```\n\nThis patch ensures that the `tags` associated with the `dispute` are included in the JSON response, which should prevent the label from being changed without the tag being updated.\n\n---\nPlease remit payment to USDC Base: 0x054ec60c9f4dd5a0010212381a1e282af8323e1d"
+  },
+  {
+   "id": 6119023069,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:31:11Z",
+   "len": 70010,
+   "head": "probe-len yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+   "tail": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+  },
+  {
+   "id": 6119023353,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:31:13Z",
+   "len": 120010,
+   "head": "probe-len yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+   "tail": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+  },
+  {
+   "id": 6119027046,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:31:33Z",
+   "len": 262010,
+   "head": "probe-len zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+   "tail": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+  },
+  {
+   "id": 6119028731,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T06:31:41Z",
+   "len": 262144,
+   "head": "probe-len zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+   "tail": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+  }
+ ]
+}
