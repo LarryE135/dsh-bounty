@@ -1,0 +1,48 @@
+name: audit-rm
+# rM 轮读回器（只在 audit-rM 分支 push 时运行）：
+#   1) 用本 run 的 GITHUB_TOKEN（只读 actions/issues）拉指定 bounty.yml run 的日志与 artifact、指定 issue 的评论与标签；
+#   2) 跑一次 `bounty_board.py --sweep-live`（**不带 --apply**，只打印计划，不写任何东西）；
+#   3) 把结果提交回 audit-rM 分支的 results/<run_id>/（GITHUB_TOKEN 的 push 不会再触发 workflow）。
+on:
+  push:
+    branches: [audit-rM]
+    paths: ['.audit-rm/req.json']
+permissions:
+  contents: write
+  issues: read
+  actions: read
+  pull-requests: read
+concurrency:
+  group: audit-rm
+  cancel-in-progress: false
+jobs:
+  c:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .audit-rm/collect.py out
+      - name: sweep plan (no --apply)
+        env:
+          BOUNTY_GH_TOKEN: ${{ github.token }}
+          PYTHONUTF8: "1"
+        run: |
+          set +e
+          python -X utf8 scripts/bounty_board.py --sweep-live --ledger-out out/sweep_events.jsonl > out/sweep_stdout.txt 2> out/sweep_stderr.txt
+          echo "rc=$?" > out/sweep_rc.txt
+          cat out/sweep_stdout.txt out/sweep_stderr.txt out/sweep_rc.txt
+      - name: push results
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "audit-bot"; git config user.email "audit-bot@users.noreply.github.com"
+          mkdir -p results/${{ github.run_id }} && cp -R out/. results/${{ github.run_id }}/
+          git add results && git commit -q -m "rM results ${{ github.run_id }}"
+          git push -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:audit-rM
