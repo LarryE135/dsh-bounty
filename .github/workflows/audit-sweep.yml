@@ -1,0 +1,41 @@
+name: audit-sweep
+# 超期扫描的 on: push 副本（上游 bounty.yml 的 schedule 腿等价物）：同一脚本、同一 --sweep-live 代码路径、同一 concurrency 组名。
+on:
+  push:
+    branches: [audit-sweep]
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+concurrency:
+  group: bounty-schedule
+  cancel-in-progress: false
+env:
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: "utf-8"
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: sweep-live
+        env:
+          BOUNTY_GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out
+          MODE=$(tr -d '[:space:]' < .audit/sweep_mode)
+          FLAG=""; [ "$MODE" = "apply" ] && FLAG="--apply"
+          set +e
+          python -X utf8 scripts/bounty_board.py --sweep-live $FLAG --ledger-out out/events.jsonl > out/stdout.txt 2> out/stderr.txt
+          echo "rc=$?" > out/rc.txt
+          date -u +%Y-%m-%dT%H:%M:%SZ > out/finished_utc.txt
+          cat out/stdout.txt out/stderr.txt out/rc.txt
+      - name: push results
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .audit/push_results.sh out "sweep/${{ github.run_id }}"
