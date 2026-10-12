@@ -1,0 +1,1 @@
+{"action": "settle", "actor": "LarryE135", "delta": 12, "difficulty": "hard", "formula": {"base": 6, "delta": 12, "den": 1, "kind": "complete", "num": 2, "raw": 12.0, "round": 0, "rounds": 1, "rule": "v1.0"}, "from": "verified", "holder": "LarryE135", "id": "evt_c43c1b9118c0", "issue": 13, "reason": "结算 12 分（hard（base 6））", "to": "settled", "ts": "2026-10-12T03:15:41Z"}

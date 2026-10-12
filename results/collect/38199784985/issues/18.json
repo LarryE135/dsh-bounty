@@ -1,0 +1,19 @@
+{
+ "number": 18,
+ "state": "closed",
+ "title": "[audit-test] T4 畸形标记让全仓命令崩溃（issue-03）",
+ "labels": [
+  "bounty",
+  "difficulty:easy"
+ ],
+ "comments_count": 1,
+ "comments": [
+  {
+   "id": 6117174602,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:24:34Z",
+   "body": "手写一行字段类型不对的标记。\n<!-- bounty:v1 {\"state\":\"claimed\",\"holder\":\"someone-else\",\"due_at\":\"2099-01-01T00:00:00Z\",\"rounds\":\"abc\",\"seq\":5} -->"
+  }
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "number": 14,
+ "state": "closed",
+ "title": "[audit-test] T12 已关闭 issue 照常受理命令",
+ "labels": [
+  "bounty",
+  "bounty:claimed",
+  "difficulty:easy"
+ ],
+ "comments_count": 2,
+ "comments": [
+  {
+   "id": 6117099071,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:16:11Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6117100703,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:16:22Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T03:16:19Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:16:19Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T03:16:19Z\"} -->"
+  }
+ ]
+}

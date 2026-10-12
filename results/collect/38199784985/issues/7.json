@@ -1,0 +1,55 @@
+{
+ "number": 7,
+ "state": "open",
+ "title": "[audit-test] T5 并发组排队被挤掉（issue-28）",
+ "labels": [
+  "bounty",
+  "bounty:open",
+  "difficulty:medium"
+ ],
+ "comments_count": 6,
+ "comments": [
+  {
+   "id": 6116949410,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:59:31Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6116949560,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:59:33Z",
+   "body": "/deliver https://example.com/t5 紧接着交付"
+  },
+  {
+   "id": 6116949690,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:59:33Z",
+   "body": "顺便说一句：这条只是普通讨论"
+  },
+  {
+   "id": 6116951470,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:59:45Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T02:59:41Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T02:59:41Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T02:59:41Z\"} -->"
+  },
+  {
+   "id": 6117086388,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:14:46Z",
+   "body": "/withdraw"
+  },
+  {
+   "id": 6117088165,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:14:58Z",
+   "body": "**[悬赏板] 已释放认领**\n\n- 释放者：@LarryE135\n- 任务已回板 `bounty:open`，任何人可重新认领\n- 主动释放**不影响声誉**\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"withdraw\",\"actor\":\"LarryE135\",\"due_at\":null,\"holder\":null,\"rounds\":0,\"seq\":2,\"state\":\"open\",\"ts\":\"2026-10-12T03:14:55Z\"} -->"
+  }
+ ]
+}

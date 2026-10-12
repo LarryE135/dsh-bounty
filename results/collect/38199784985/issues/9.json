@@ -1,0 +1,97 @@
+{
+ "number": 9,
+ "state": "open",
+ "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+ "labels": [
+  "bounty",
+  "bounty:open",
+  "difficulty:easy"
+ ],
+ "comments_count": 12,
+ "comments": [
+  {
+   "id": 6116957146,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:00:24Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6116958831,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:00:34Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T03:00:31Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:00:31Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T03:00:31Z\"} -->"
+  },
+  {
+   "id": 6116979159,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:02:46Z",
+   "body": "/dispute 测试争议出口"
+  },
+  {
+   "id": 6116981254,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:03:00Z",
+   "body": "**[悬赏板] 已进入争议**\n\n- 提起者：@LarryE135\n- 理由：测试争议出口\n- 已转 `bounty:disputed`：由维护者仲裁并留痕（记录在案，不扣本金）\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"dispute\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:00:31Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":2,\"state\":\"disputed\",\"ts\":\"2026-10-12T03:02:56Z\"} -->"
+  },
+  {
+   "id": 6116983614,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:03:15Z",
+   "body": "/withdraw"
+  },
+  {
+   "id": 6116985388,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:03:27Z",
+   "body": "**[悬赏板] 本次操作未通过**\n\n- 命令：`/withdraw`\n- 原因：当前态 `bounty:disputed` 无需释放\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"reject\",\"actor\":\"LarryE135\",\"cmd\":\"/withdraw\",\"code\":\"state_not_withdrawable\",\"ts\":\"2026-10-12T03:03:23Z\"} -->"
+  },
+  {
+   "id": 6116986479,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:03:34Z",
+   "body": "/verify pass 试图仲裁通过"
+  },
+  {
+   "id": 6116988474,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:03:48Z",
+   "body": "**[悬赏板] 本次操作未通过**\n\n- 命令：`/verify`\n- 原因：当前态 `bounty:disputed` 不在待验收面\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"reject\",\"actor\":\"LarryE135\",\"cmd\":\"/verify\",\"code\":\"state_not_verifiable\",\"ts\":\"2026-10-12T03:03:45Z\"} -->"
+  },
+  {
+   "id": 6116991798,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:04:09Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6116993485,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:04:21Z",
+   "body": "**[悬赏板] 本次操作未通过**\n\n- 命令：`/claim`\n- 原因：已有持有者 @LarryE135（到期 2026-10-15T03:00:31Z）——先等其交付或超时回板\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"reject\",\"actor\":\"LarryE135\",\"cmd\":\"/claim\",\"code\":\"holder_exists\",\"ts\":\"2026-10-12T03:04:18Z\"} -->"
+  },
+  {
+   "id": 6116999702,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:05:02Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6117001796,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:05:16Z",
+   "body": "**[悬赏板] 本次操作未通过**\n\n- 命令：`/claim`\n- 原因：已有持有者 @LarryE135（到期 2026-10-15T03:00:31Z）——先等其交付或超时回板\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"reject\",\"actor\":\"LarryE135\",\"cmd\":\"/claim\",\"code\":\"holder_exists\",\"ts\":\"2026-10-12T03:05:12Z\"} -->"
+  }
+ ]
+}

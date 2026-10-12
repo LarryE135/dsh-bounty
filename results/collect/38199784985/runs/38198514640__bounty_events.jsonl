@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "medium", "from": "open", "holder": null, "id": "evt_f0ea04d0d5c1", "issue": 12, "reason": "not_holder：仅当前持有者可执行该命令（当前持有者：@（无））", "to": "open", "ts": "2026-10-12T03:07:33Z"}

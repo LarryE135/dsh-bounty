@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "medium", "from": "claimed", "holder": "LarryE135", "id": "evt_02648d3f531c", "issue": 12, "reason": "payload_missing：交付必须带链接（`http(s)://…`，如 PR 地址）或证据块（围栏内贴可复跑读数）", "to": "claimed", "ts": "2026-10-12T03:10:52Z"}

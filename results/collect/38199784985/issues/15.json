@@ -1,0 +1,82 @@
+{
+ "number": 15,
+ "state": "open",
+ "title": "[audit-test] T2b 正文里的标记 + 模板难度下拉",
+ "labels": [
+  "bounty",
+  "bounty:settled"
+ ],
+ "comments_count": 10,
+ "comments": [
+  {
+   "id": 6117104108,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:16:44Z",
+   "body": "/settle"
+  },
+  {
+   "id": 6117105779,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:16:55Z",
+   "body": "**[悬赏板] 本次操作未通过**\n\n- 命令：`/settle`\n- 原因：当前态 `bounty:open` 不可结算（须先过验收 `bounty:verified`）\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"reject\",\"actor\":\"LarryE135\",\"cmd\":\"/settle\",\"code\":\"state_not_settleable\",\"ts\":\"2026-10-12T03:16:53Z\"} -->"
+  },
+  {
+   "id": 6117107102,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:17:04Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6117109159,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:17:17Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T03:17:13Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:17:13Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T03:17:13Z\"} -->"
+  },
+  {
+   "id": 6117112339,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:17:39Z",
+   "body": "/deliver https://example.com/t2b"
+  },
+  {
+   "id": 6117114445,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:17:52Z",
+   "body": "**[悬赏板] 交付已登记**\n\n- 交付者：@LarryE135\n- 第 1/3 轮\n- 交付物：https://example.com/t2b\n- 验收四闸：① CI 全绿 ② 复现读数 ③ 守卫＋定点变异 ④ 维护者人审\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"deliver\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:17:13Z\",\"holder\":\"LarryE135\",\"rounds\":1,\"seq\":2,\"state\":\"delivered\",\"ts\":\"2026-10-12T03:17:47Z\"} -->"
+  },
+  {
+   "id": 6117115602,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:17:59Z",
+   "body": "/verify pass ok"
+  },
+  {
+   "id": 6117117626,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:18:12Z",
+   "body": "**[悬赏板] 验收裁决**\n\n- 裁决者：@LarryE135\n- 判定：**通过**（四闸逐道可查）\n- 理由：ok\n- 待结算：维护者 `/settle` 按 `difficulty:*` 记入账本\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"verify\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:17:13Z\",\"holder\":\"LarryE135\",\"rounds\":1,\"seq\":3,\"state\":\"verified\",\"ts\":\"2026-10-12T03:18:07Z\"} -->"
+  },
+  {
+   "id": 6117118686,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:18:19Z",
+   "body": "/settle"
+  },
+  {
+   "id": 6117120904,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:18:35Z",
+   "body": "**[悬赏板] 已结算**\n\n- 结算者：@LarryE135\n- 入账：@LarryE135 **+2 分**（无 difficulty 标签（按 base 1 记））\n- 账本 append-only：`docs/bounty/ledger.json`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"settle\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:17:13Z\",\"holder\":\"LarryE135\",\"rounds\":1,\"seq\":4,\"state\":\"settled\",\"ts\":\"2026-10-12T03:18:30Z\"} -->"
+  }
+ ]
+}

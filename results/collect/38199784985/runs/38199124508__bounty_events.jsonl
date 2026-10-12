@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "", "from": "open", "holder": null, "id": "evt_3f2934f6ee0b", "issue": 15, "reason": "state_not_settleable：当前态 `bounty:open` 不可结算（须先过验收 `bounty:verified`）", "to": "open", "ts": "2026-10-12T03:16:53Z"}

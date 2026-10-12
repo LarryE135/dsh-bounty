@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "easy", "from": "open", "holder": null, "id": "evt_3443ceeaac42", "issue": 10, "reason": "concurrency_limit：@LarryE135 当前并发认领 3 个，已达上限 2（交付或释放其中任一后可再认领）", "to": "open", "ts": "2026-10-12T03:01:27Z"}

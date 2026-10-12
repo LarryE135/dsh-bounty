@@ -1,0 +1,776 @@
+{
+ "number": 17,
+ "state": "open",
+ "title": "[audit-test] T14 评论分页（>100 条）",
+ "labels": [
+  "bounty",
+  "bounty:delivered",
+  "difficulty:easy"
+ ],
+ "comments_count": 109,
+ "comments": [
+  {
+   "id": 6117144700,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:15Z",
+   "body": "分页填充评论 001（非命令）"
+  },
+  {
+   "id": 6117144937,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:17Z",
+   "body": "分页填充评论 002（非命令）"
+  },
+  {
+   "id": 6117145175,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:18Z",
+   "body": "分页填充评论 003（非命令）"
+  },
+  {
+   "id": 6117145401,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:20Z",
+   "body": "分页填充评论 004（非命令）"
+  },
+  {
+   "id": 6117145650,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:21Z",
+   "body": "分页填充评论 005（非命令）"
+  },
+  {
+   "id": 6117145886,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:23Z",
+   "body": "分页填充评论 006（非命令）"
+  },
+  {
+   "id": 6117146103,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:24Z",
+   "body": "分页填充评论 007（非命令）"
+  },
+  {
+   "id": 6117146366,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:26Z",
+   "body": "分页填充评论 008（非命令）"
+  },
+  {
+   "id": 6117146666,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:28Z",
+   "body": "分页填充评论 009（非命令）"
+  },
+  {
+   "id": 6117146943,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:29Z",
+   "body": "分页填充评论 010（非命令）"
+  },
+  {
+   "id": 6117147203,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:31Z",
+   "body": "分页填充评论 011（非命令）"
+  },
+  {
+   "id": 6117147417,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:32Z",
+   "body": "分页填充评论 012（非命令）"
+  },
+  {
+   "id": 6117147632,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:34Z",
+   "body": "分页填充评论 013（非命令）"
+  },
+  {
+   "id": 6117147866,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:35Z",
+   "body": "分页填充评论 014（非命令）"
+  },
+  {
+   "id": 6117148103,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:37Z",
+   "body": "分页填充评论 015（非命令）"
+  },
+  {
+   "id": 6117148304,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:38Z",
+   "body": "分页填充评论 016（非命令）"
+  },
+  {
+   "id": 6117148518,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:40Z",
+   "body": "分页填充评论 017（非命令）"
+  },
+  {
+   "id": 6117148772,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:41Z",
+   "body": "分页填充评论 018（非命令）"
+  },
+  {
+   "id": 6117149019,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:43Z",
+   "body": "分页填充评论 019（非命令）"
+  },
+  {
+   "id": 6117149240,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:45Z",
+   "body": "分页填充评论 020（非命令）"
+  },
+  {
+   "id": 6117149459,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:46Z",
+   "body": "分页填充评论 021（非命令）"
+  },
+  {
+   "id": 6117149691,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:48Z",
+   "body": "分页填充评论 022（非命令）"
+  },
+  {
+   "id": 6117149910,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:49Z",
+   "body": "分页填充评论 023（非命令）"
+  },
+  {
+   "id": 6117150142,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:51Z",
+   "body": "分页填充评论 024（非命令）"
+  },
+  {
+   "id": 6117150361,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:52Z",
+   "body": "分页填充评论 025（非命令）"
+  },
+  {
+   "id": 6117150595,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:54Z",
+   "body": "分页填充评论 026（非命令）"
+  },
+  {
+   "id": 6117150842,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:55Z",
+   "body": "分页填充评论 027（非命令）"
+  },
+  {
+   "id": 6117151089,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:57Z",
+   "body": "分页填充评论 028（非命令）"
+  },
+  {
+   "id": 6117151339,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:21:58Z",
+   "body": "分页填充评论 029（非命令）"
+  },
+  {
+   "id": 6117151616,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:00Z",
+   "body": "分页填充评论 030（非命令）"
+  },
+  {
+   "id": 6117151847,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:02Z",
+   "body": "分页填充评论 031（非命令）"
+  },
+  {
+   "id": 6117152095,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:03Z",
+   "body": "分页填充评论 032（非命令）"
+  },
+  {
+   "id": 6117152317,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:05Z",
+   "body": "分页填充评论 033（非命令）"
+  },
+  {
+   "id": 6117152558,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:06Z",
+   "body": "分页填充评论 034（非命令）"
+  },
+  {
+   "id": 6117152824,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:08Z",
+   "body": "分页填充评论 035（非命令）"
+  },
+  {
+   "id": 6117153057,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:10Z",
+   "body": "分页填充评论 036（非命令）"
+  },
+  {
+   "id": 6117153281,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:11Z",
+   "body": "分页填充评论 037（非命令）"
+  },
+  {
+   "id": 6117153527,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:13Z",
+   "body": "分页填充评论 038（非命令）"
+  },
+  {
+   "id": 6117153765,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:14Z",
+   "body": "分页填充评论 039（非命令）"
+  },
+  {
+   "id": 6117153974,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:16Z",
+   "body": "分页填充评论 040（非命令）"
+  },
+  {
+   "id": 6117154184,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:17Z",
+   "body": "分页填充评论 041（非命令）"
+  },
+  {
+   "id": 6117154389,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:19Z",
+   "body": "分页填充评论 042（非命令）"
+  },
+  {
+   "id": 6117154572,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:20Z",
+   "body": "分页填充评论 043（非命令）"
+  },
+  {
+   "id": 6117154784,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:22Z",
+   "body": "分页填充评论 044（非命令）"
+  },
+  {
+   "id": 6117154996,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:23Z",
+   "body": "分页填充评论 045（非命令）"
+  },
+  {
+   "id": 6117155207,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:25Z",
+   "body": "分页填充评论 046（非命令）"
+  },
+  {
+   "id": 6117155466,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:27Z",
+   "body": "分页填充评论 047（非命令）"
+  },
+  {
+   "id": 6117155704,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:28Z",
+   "body": "分页填充评论 048（非命令）"
+  },
+  {
+   "id": 6117155917,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:30Z",
+   "body": "分页填充评论 049（非命令）"
+  },
+  {
+   "id": 6117156169,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:31Z",
+   "body": "分页填充评论 050（非命令）"
+  },
+  {
+   "id": 6117156437,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:33Z",
+   "body": "分页填充评论 051（非命令）"
+  },
+  {
+   "id": 6117156657,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:34Z",
+   "body": "分页填充评论 052（非命令）"
+  },
+  {
+   "id": 6117156883,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:36Z",
+   "body": "分页填充评论 053（非命令）"
+  },
+  {
+   "id": 6117157085,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:37Z",
+   "body": "分页填充评论 054（非命令）"
+  },
+  {
+   "id": 6117157314,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:39Z",
+   "body": "分页填充评论 055（非命令）"
+  },
+  {
+   "id": 6117157555,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:40Z",
+   "body": "分页填充评论 056（非命令）"
+  },
+  {
+   "id": 6117159629,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:54Z",
+   "body": "分页填充评论 059（非命令）"
+  },
+  {
+   "id": 6117159636,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:54Z",
+   "body": "分页填充评论 058（非命令）"
+  },
+  {
+   "id": 6117159641,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:54Z",
+   "body": "分页填充评论 057（非命令）"
+  },
+  {
+   "id": 6117159764,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:55Z",
+   "body": "分页填充评论 060（非命令）"
+  },
+  {
+   "id": 6117159801,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:56Z",
+   "body": "分页填充评论 061（非命令）"
+  },
+  {
+   "id": 6117159807,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:56Z",
+   "body": "分页填充评论 062（非命令）"
+  },
+  {
+   "id": 6117159914,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:56Z",
+   "body": "分页填充评论 063（非命令）"
+  },
+  {
+   "id": 6117159966,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:57Z",
+   "body": "分页填充评论 064（非命令）"
+  },
+  {
+   "id": 6117159984,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:57Z",
+   "body": "分页填充评论 065（非命令）"
+  },
+  {
+   "id": 6117160056,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:57Z",
+   "body": "分页填充评论 066（非命令）"
+  },
+  {
+   "id": 6117160127,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:58Z",
+   "body": "分页填充评论 067（非命令）"
+  },
+  {
+   "id": 6117160144,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:58Z",
+   "body": "分页填充评论 068（非命令）"
+  },
+  {
+   "id": 6117160205,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:58Z",
+   "body": "分页填充评论 069（非命令）"
+  },
+  {
+   "id": 6117160287,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:59Z",
+   "body": "分页填充评论 070（非命令）"
+  },
+  {
+   "id": 6117160306,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:59Z",
+   "body": "分页填充评论 071（非命令）"
+  },
+  {
+   "id": 6117160366,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:22:59Z",
+   "body": "分页填充评论 072（非命令）"
+  },
+  {
+   "id": 6117160423,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:00Z",
+   "body": "分页填充评论 073（非命令）"
+  },
+  {
+   "id": 6117160437,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:00Z",
+   "body": "分页填充评论 074（非命令）"
+  },
+  {
+   "id": 6117160513,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:00Z",
+   "body": "分页填充评论 075（非命令）"
+  },
+  {
+   "id": 6117160545,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:00Z",
+   "body": "分页填充评论 076（非命令）"
+  },
+  {
+   "id": 6117160576,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:01Z",
+   "body": "分页填充评论 077（非命令）"
+  },
+  {
+   "id": 6117160666,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:01Z",
+   "body": "分页填充评论 078（非命令）"
+  },
+  {
+   "id": 6117160723,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:02Z",
+   "body": "分页填充评论 079（非命令）"
+  },
+  {
+   "id": 6117160757,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:02Z",
+   "body": "分页填充评论 080（非命令）"
+  },
+  {
+   "id": 6117160810,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:02Z",
+   "body": "分页填充评论 081（非命令）"
+  },
+  {
+   "id": 6117160862,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:03Z",
+   "body": "分页填充评论 082（非命令）"
+  },
+  {
+   "id": 6117160917,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:03Z",
+   "body": "分页填充评论 083（非命令）"
+  },
+  {
+   "id": 6117160936,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:03Z",
+   "body": "分页填充评论 084（非命令）"
+  },
+  {
+   "id": 6117161011,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:04Z",
+   "body": "分页填充评论 085（非命令）"
+  },
+  {
+   "id": 6117161080,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:04Z",
+   "body": "分页填充评论 086（非命令）"
+  },
+  {
+   "id": 6117161096,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:04Z",
+   "body": "分页填充评论 087（非命令）"
+  },
+  {
+   "id": 6117161153,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:05Z",
+   "body": "分页填充评论 088（非命令）"
+  },
+  {
+   "id": 6117161268,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:05Z",
+   "body": "分页填充评论 089（非命令）"
+  },
+  {
+   "id": 6117161275,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:05Z",
+   "body": "分页填充评论 090（非命令）"
+  },
+  {
+   "id": 6117161289,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:05Z",
+   "body": "分页填充评论 091（非命令）"
+  },
+  {
+   "id": 6117161444,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:06Z",
+   "body": "分页填充评论 092（非命令）"
+  },
+  {
+   "id": 6117161468,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:07Z",
+   "body": "分页填充评论 093（非命令）"
+  },
+  {
+   "id": 6117161475,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:07Z",
+   "body": "分页填充评论 094（非命令）"
+  },
+  {
+   "id": 6117161585,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:07Z",
+   "body": "分页填充评论 095（非命令）"
+  },
+  {
+   "id": 6117161627,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:08Z",
+   "body": "分页填充评论 096（非命令）"
+  },
+  {
+   "id": 6117161645,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:08Z",
+   "body": "分页填充评论 097（非命令）"
+  },
+  {
+   "id": 6117161717,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:08Z",
+   "body": "分页填充评论 098（非命令）"
+  },
+  {
+   "id": 6117161766,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:09Z",
+   "body": "分页填充评论 099（非命令）"
+  },
+  {
+   "id": 6117161798,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:09Z",
+   "body": "分页填充评论 100（非命令）"
+  },
+  {
+   "id": 6117161857,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:09Z",
+   "body": "分页填充评论 101（非命令）"
+  },
+  {
+   "id": 6117161912,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:10Z",
+   "body": "分页填充评论 102（非命令）"
+  },
+  {
+   "id": 6117161953,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:10Z",
+   "body": "分页填充评论 103（非命令）"
+  },
+  {
+   "id": 6117162002,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:10Z",
+   "body": "分页填充评论 104（非命令）"
+  },
+  {
+   "id": 6117162064,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:11Z",
+   "body": "分页填充评论 105（非命令）"
+  },
+  {
+   "id": 6117163802,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:22Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6117165727,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:23:35Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T03:23:32Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:23:32Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T03:23:32Z\"} -->"
+  },
+  {
+   "id": 6117167895,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T03:23:50Z",
+   "body": "/deliver https://example.com/t14"
+  },
+  {
+   "id": 6117170301,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T03:24:06Z",
+   "body": "**[悬赏板] 交付已登记**\n\n- 交付者：@LarryE135\n- 第 1/3 轮\n- 交付物：https://example.com/t14\n- 验收四闸：① CI 全绿 ② 复现读数 ③ 守卫＋定点变异 ④ 维护者人审\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"deliver\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T03:23:32Z\",\"holder\":\"LarryE135\",\"rounds\":1,\"seq\":2,\"state\":\"delivered\",\"ts\":\"2026-10-12T03:24:00Z\"} -->"
+  }
+ ]
+}

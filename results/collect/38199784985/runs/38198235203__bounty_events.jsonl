@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "easy", "from": "disputed", "holder": "LarryE135", "id": "evt_952c56532197", "issue": 9, "reason": "state_not_withdrawable：当前态 `bounty:disputed` 无需释放", "to": "disputed", "ts": "2026-10-12T03:03:23Z"}

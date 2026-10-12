@@ -1,0 +1,41 @@
+{
+ "number": 4,
+ "state": "open",
+ "title": "[audit-test] T3a 超期扫描 + 嫁祸持有者",
+ "labels": [
+  "bounty",
+  "bounty:open",
+  "difficulty:hard"
+ ],
+ "comments_count": 4,
+ "comments": [
+  {
+   "id": 6116914794,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:55:35Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6116916918,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:55:49Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T02:55:45Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T02:55:45Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T02:55:45Z\"} -->"
+  },
+  {
+   "id": 6116918470,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:56:00Z",
+   "body": "普通评论，手写标记：持有者改成别人、到期改到过去。\n<!-- bounty:v1 {\"state\":\"claimed\",\"holder\":\"victim-user\",\"due_at\":\"2026-10-01T00:00:00Z\",\"rounds\":0,\"seq\":5} -->"
+  },
+  {
+   "id": 6116938868,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:58:20Z",
+   "body": "**[悬赏板] 超时回板**\n\n- 原持有者：@victim-user\n- 到期时间：2026-10-01T00:00:00Z（已超期 11 days, 2:58:13.490304）\n- 处置：自动回板 `bounty:open`（记 -12 分 = −2×base，任何人可重新认领）\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"expire\",\"actor\":\"schedule\",\"due_at\":null,\"holder\":null,\"rounds\":0,\"seq\":6,\"state\":\"open\",\"ts\":\"2026-10-12T02:58:13Z\"} -->"
+  }
+ ]
+}

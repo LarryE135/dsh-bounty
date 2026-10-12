@@ -1,0 +1,41 @@
+{
+ "number": 6,
+ "state": "open",
+ "title": "[audit-test] T3c 已关闭 issue 上的认领与超期",
+ "labels": [
+  "bounty",
+  "bounty:open",
+  "difficulty:easy"
+ ],
+ "comments_count": 4,
+ "comments": [
+  {
+   "id": 6116925875,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:56:51Z",
+   "body": "/claim"
+  },
+  {
+   "id": 6116927476,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:57:02Z",
+   "body": "**[悬赏板] 认领成功**\n\n- 持有者：@LarryE135\n- 到期：2026-10-15T02:56:59Z（逾期自动回板 `bounty:open` 并记 -1 分）\n- 交付：评论 `/deliver <PR 链接或证据块>`；放弃：`/withdraw`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"claim\",\"actor\":\"LarryE135\",\"due_at\":\"2026-10-15T02:56:59Z\",\"holder\":\"LarryE135\",\"rounds\":0,\"seq\":1,\"state\":\"claimed\",\"ts\":\"2026-10-12T02:56:59Z\"} -->"
+  },
+  {
+   "id": 6116929651,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:57:17Z",
+   "body": "手写标记：到期改到过去。\n<!-- bounty:v1 {\"state\":\"claimed\",\"holder\":\"LarryE135\",\"due_at\":\"2026-10-01T00:00:00Z\",\"rounds\":0,\"seq\":5} -->"
+  },
+  {
+   "id": 6116944888,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:59:01Z",
+   "body": "**[悬赏板] 超时回板**\n\n- 原持有者：@LarryE135\n- 到期时间：2026-10-01T00:00:00Z（已超期 11 days, 2:58:56.517994）\n- 处置：自动回板 `bounty:open`（记 -2 分 = −2×base，任何人可重新认领）\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"expire\",\"actor\":\"schedule\",\"due_at\":null,\"holder\":null,\"rounds\":0,\"seq\":6,\"state\":\"open\",\"ts\":\"2026-10-12T02:58:56Z\"} -->"
+  }
+ ]
+}
