@@ -1,0 +1,2881 @@
+# cmd: python -X utf8 tests/test_bounty_board.py --mutate  (cwd=lfcopy_utf8)
+# rc=0 secs=0.2
+## stdout
+!! 定点变异自证：逐条短路一条校验，对应断言必须**恰好**转红
+
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+
+  未变异基线：红项 0 （应为 0）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [FAIL] A2 正文中间出现的命令不认（首行非命令即整条忽略）  · 我先看看
+  [FAIL] A3 无斜杠的 claim 不认（命令词表为准）  · claim
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [FAIL] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发  · ('/claim：我先占用', '')
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [FAIL] I3 非命令评论 → 无动作  · (0, [{'ts': '2026-10-12T02:41:40Z', 'issue': 301, 'action': 'reject', 'actor': 'zoe', 'from': 'open', 'to': 'open', 'holder': None, 'difficulty': 'medium', 'delta': 0, 'reason': "unknown_command：未知命令 '我先看看这个任务，稍后'", 'id': 'evt_556372b67789'}])
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M0 关命令识别（任意首词当命令）：红项 4（期望 4）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [FAIL] B1 无 `bounty` 标签 → 拒  · @alice 认领，锁至 2026-10-12T00:00:00Z
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M1 关 R3 标签判据（无 bounty 标签也放行）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [FAIL] B2 态为 settled（非 open/expired）→ 拒（不可认领）  · @bob 认领，锁至 2026-10-12T00:00:00Z
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M2 关 R3 态判据（非 open/expired 也放行）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [FAIL] C1 已有持有者 → 拒（理由点名持有者与到期）  · @bob 认领，锁至 2026-10-12T00:00:00Z
+  [FAIL] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）  · 当前态 `bounty:claimed` 不可认领（仅 open/expired 可认领）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M3 关 R1 无持有者判据（撞锁放行）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [FAIL] D3 已持有 2 个（达上界）→ 拒  · @dave 认领，锁至 2026-10-12T00:00:00Z
+  [FAIL] D4 上限可配（=1 且已持有 1）→ 拒  · @dave 认领，锁至 2026-10-12T00:00:00Z
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M4 关 R2 并发上限判据（无限并发）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [FAIL] E1 非持有者 /deliver → 拒  · @bob 第 1 轮交付（https://example.com/pull/7）
+  [FAIL] E2 非持有者 /withdraw → 拒  · @bob 主动释放认领，任务回板
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M5 关 R4 仅认领人判据（他人可交付/释放）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [FAIL] F1 空载荷且无围栏 → 拒  · @alice 第 1 轮交付（）
+  [FAIL] F2 无链接无围栏的说明文字 → 拒  · @alice 第 1 轮交付（见附件）
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M6 关 R5 链接判据（无据交付放行）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [FAIL] F5 载荷无链接但正文带围栏证据块 → 通过  · 交付必须带链接（`http(s)://…`，如 PR 地址）或证据块（围栏内贴可复跑读数）
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M7 关 R5 证据块判据（围栏交付不再被认）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [FAIL] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）  · (True, 'settled', 3)
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [FAIL] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）  · [(10, 10, 10, 10), (6, 6, 6, 6), (3, 3, 3, 3), (1, 1, 1, 1)]
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [FAIL] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）  · (6, {'rule': 'v1.0', 'kind': 'complete', 'base': 6, 'rounds': 3, 'round': 2, 'num': 2, 'den': 3, 'raw': 6.0, 'delta': 6})
+  [FAIL] G20 rescore 全等：按 formula 复算 == 落盘 delta  · [('evt_cd635c53538d', 'delta mismatch', 6, 4)]
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [FAIL] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4  · (6, {'rule': 'v1.0', 'kind': 'complete', 'base': 6, 'rounds': 2, 'round': 1, 'num': 2, 'den': 2, 'raw': 6.0, 'delta': 6, 'e_pass': 3, 'e_total': 5})
+  [FAIL] G24 rescore 按 e_pass/e_total 复算一致  · [('evt_a279c98013d6', 'delta mismatch', 6, 4)]
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M8 关质量乘数（完成分恒 base）：红项 6（期望 6）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [FAIL] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M9 去保底 max(1,·)：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [FAIL] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）  · (True, 'claimed', -5)
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M10 /verify fail 又扣分（退回返工不放过）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [FAIL] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）  · (True, 'disputed', 0)
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M11 轮次用尽不判无效（不记 −base）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [FAIL] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）  · (1, 'open')
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M12 超时不按 base 缩放（回到固定 −1）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [FAIL] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）  · (True, 'settled', 6)
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [FAIL] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）  · (4, {})
+  [FAIL] G20 rescore 全等：按 formula 复算 == 落盘 delta  · [('evt_5b15c6f05fa4', 'missing formula', 4, None)]
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [FAIL] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4  · (4, None)
+  [FAIL] G24 rescore 按 e_pass/e_total 复算一致  · [('evt_ef21339f835d', 'missing formula', 4, None)]
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [FAIL] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3  · (3, None)
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M13 去 formula 快照（复算链断）：红项 6（期望 6）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [FAIL] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）  · (2, 4)
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M14 舍入改内置 round（银行家）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [FAIL] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4  · (6, {'rule': 'v1.0', 'kind': 'complete', 'base': 6, 'rounds': 2, 'round': 1, 'num': 2, 'den': 2, 'raw': 6.0, 'delta': 6, 'e_pass': 3, 'e_total': 5})
+  [FAIL] G24 rescore 按 e_pass/e_total 复算一致  · [('evt_a279c98013d6', 'delta mismatch', 6, 4)]
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [FAIL] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3  · (6, {'rule': 'v1.0', 'kind': 'complete', 'base': 3, 'rounds': 1, 'round': 0, 'num': 2, 'den': 1, 'raw': 6.0, 'delta': 6, 'e_pass': 1, 'e_total': 2})
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M15 关 E 乘数（E ≡ 1）：红项 3（期望 3）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [FAIL] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]  · <!-- bounty:v1 {"action":"verify","actor":"FuRongJun-1999","due_at":null,"holder":"alice","rounds":2,"seq":2,"state":"verified","ts":"2026-10-09T00:00:00Z"} -->
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M16 不写验收条目快照（E 不可复算）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [FAIL] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）  · ('验收部分通过 5/3：越界', 'partial 须给「通过数/总数」，如 `/verify partial 3/5 <理由>`')
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M17 partial 不校验数值范围（越界放行）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [FAIL] G24 rescore 按 e_pass/e_total 复算一致  · [('evt_9190cfcb78e8', 'delta mismatch', 4, 6)]
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M18 rescore 忽略 E（复算链与结算口径分叉）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [FAIL] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）  · @alice 投标（第 2 份）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M19 关一人一投判据（可重复投标刷名单）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [FAIL] G30 投标截止后 → 拒（bid_deadline_passed）  · @alice 投标（第 1 份）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M20 关投标截止判据（截止后可改标）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [FAIL] G31 非招标态 /bid → 拒（state_not_bidding）  · @alice 投标（第 1 份）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M21 关招标态判据（非招标也收标）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [FAIL] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）  · [('alice', 0), ('carol', 0)]
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [FAIL] G36 落选分 rescore 一致（按难度表复算）  · [('evt_11a2542230dc', 'delta mismatch', 0, 2), ('evt_c309c368d29d', 'delta mismatch', 0, 2)]
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M22 落选分恒 0（难度表失效）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [FAIL] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M23 不写 0 分落选事件（与未投标同形）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [FAIL] G35 定标越权/非投标人/无投标 → 三种皆拒  · ('仅维护者可定标（人审闸）', '定标：@dave 中标（1 份投标）', '尚无投标——无标可定')
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M24 定标不校验中标人（任选一人）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [FAIL] G36 落选分 rescore 一致（按难度表复算）  · [('evt_1521f2ee73f3', 'delta mismatch', 2, 0), ('evt_100296b78a91', 'delta mismatch', 2, 0)]
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M25 rescore 落选分恒 0：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [FAIL] G38 未知等级 → 拒，且提示当前表（表可调）  · 价值评价 Z：随便
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [FAIL] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复  · (True, False)
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M26 关影响等级表校验（任意等级放行）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [FAIL] G39 价值评价无依据 → 拒（否则不可追溯）  · 价值评价 S：
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M27 关「评价必须带依据」（不可追溯）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [FAIL] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）  · ('delivered', 0, 'A')
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [FAIL] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）  · ion":"verify","actor":"FuRongJun-1999","due_at":null,"holder":"alice","rounds":1,"seq":3,"state":"verified","ts":"2026-10-09T00:00:00Z"} -->
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M28 不写影响等级快照（跨态丢失）：红项 2（期望 2）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [FAIL] G40 非维护者 /appraise → 拒（人审闸）  · 价值评价 A：有依据
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M29 关价值评价的维护者闸（越权可评）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [FAIL] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）  · (['amount', 'difficulty', 'difficulty_base', 'evidence_strength', 'impact_grade', 'issues', 'login', 'project', 'quality_E', 'reputation_delta', 'rounds'], {'login': 'wasd', 'project': 'memory', 'reputation_delta': 4, 'difficulty': 'expert', 'rounds': 1, 'issues': [8], 'difficulty_base': 10, 'quality_E': 0.6, 'impact_grade': 'A', 'evidence_strength': True, 'amount': 4})
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M30 向价值向量注入金额字段（越界）：红项 1（期望 1）
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [FAIL] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真  · {'login': 'cyd471', 'project': 'memory', 'reputation_delta': 6, 'difficulty': 'hard', 'rounds': 0, 'issues': [7], 'difficulty_base': 6, 'quality_E': None, 'impact_grade': 'S', 'evidence_strength': False}
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+  [PASS] M31 关证据强度判据（formula 凭据不计）：红项 1（期望 1）
+
+定点变异：PASS（逐条恰好命中期望红项）
+
+## stderr

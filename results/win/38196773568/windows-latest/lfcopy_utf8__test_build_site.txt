@@ -1,0 +1,36 @@
+# cmd: python -X utf8 tests/test_build_site.py  (cwd=lfcopy_utf8)
+# rc=0 secs=0.5
+## stdout
+悬赏站生成器守卫（scripts/build_site.py · 账本→页面映射断言）
+==========================================================================
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+[K] 落盘面（四页齐 / 逐字节确定 / 空账本 / 注入转义——真跑子进程）
+  [PASS] K1 生成器退出码 0（账本 → 四页落盘）
+  [PASS] K2 四页齐：index / board / honor / rules
+  [PASS] K3 确定性：同账本两次生成逐字节相同（不含生成时刻）
+  [PASS] K4 落盘的荣誉榜含账本算出的分数（@alice 13）
+  [PASS] K5 落盘的荣誉榜不含未转义的注入文本
+  [PASS] K6 空账本 → 退出码 0 且四页仍齐（不崩）
+  [PASS] K7 --tasks 快照（issue 面）被悬赏板采用
+  [PASS] K8 --print 只打印不落盘（退出码 0，stdout 含四页头）
+  [PASS] K9 坏账本 → fail-closed 退出码 2（不静默当成功）
+==========================================================================
+通过 24 / 失败 0
+ALL OK（反面证明见 --mutate）
+
+## stderr

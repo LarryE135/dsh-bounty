@@ -1,0 +1,112 @@
+# cmd: python -X utf8 tests/test_build_site.py --mutate  (cwd=lfcopy_utf8)
+# rc=0 secs=0.1
+## stdout
+!! 定点变异自证：逐条短路一条映射，对应断言必须**恰好**转红
+
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+
+  未变异基线：红项 0 （应为 0）
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [FAIL] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前  · [('alice', 13), ('bob', 0), ('carol', -1), ('dave', 0), ('erin', 0), ('eve<img src=x onerror=alert(1)>', 0)]
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+  [PASS] N0 关榜面排序（改按登录名字母序）：红项 1（期望 1）
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [FAIL] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）  · [('103', 'settled'), ('106', 'delivered'), ('107', 'claimed'), ('101', 'settled'), ('104', 'claimed'), ('105', 'open'), ('102', 'settled')]
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+  [PASS] N1 关开放态过滤（settled/delivered 也进悬赏板）：红项 1（期望 1）
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [FAIL] J1 HTML 转义：账本文本里的标签被转义（不注入页面）  · <script>
+  [FAIL] J2 转义覆盖引号（防属性逃逸）  · " onload="x
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [FAIL] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现  · eve<img src=x onerror=alert(1)></td><td><b>0</b></td><td>0</
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+  [PASS] N2 关 HTML 转义（账本文本直出）：红项 3（期望 3）
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [PASS] J7 悬赏板按难度序升序（easy→medium→hard→expert）
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [FAIL] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [FAIL] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+  [PASS] N3 关计分口径标注（页面不再声明口径）：红项 2（期望 2）
+[J] 映射面（转义 / 开放态 / 难度序 / 分数降序 / 求和 / 待裁标注）
+  [PASS] J1 HTML 转义：账本文本里的标签被转义（不注入页面）
+  [PASS] J2 转义覆盖引号（防属性逃逸）
+  [PASS] J3 榜面分数降序：alice(+13) 在 carol(−1) 之前
+  [PASS] J4 分数＝账本 delta 求和（alice = 3+10，不手写）
+  [PASS] J5 被拒命令记在尝试者头上（bob 计 1 次被拒、0 分；不记持有者 alice）
+  [PASS] J6 悬赏板只列可认领态：仅 withdraw 后的 #105 在板（settled/delivered/claimed 不在）
+  [FAIL] J7 悬赏板按难度序升序（easy→medium→hard→expert）  · [('1', 'easy'), ('2', 'expert'), ('3', 'hard'), ('4', 'medium')]
+  [PASS] J8 态标签前缀被归一（`bounty:open` 与 `open` 同判）
+  [PASS] J9 荣誉榜页含账本算出的分数与贡献者（@alice 与 13）
+  [PASS] J10 荣誉榜页带计分口径标注（v1.0 质量化，已裁定）
+  [PASS] J11 规则页带计分口径标注且人审闸未被写成自动通过
+  [PASS] J12 账本注入文本（登录名）进页面后被转义：原始标签不出现、转义形态出现
+  [PASS] J13 空账本 → 荣誉榜给「暂无入账」形态且不崩
+  [PASS] J14 空账本 → 悬赏板给「没有可认领」形态
+  [PASS] J15 计分口径复用状态机（榜面分数真源＝bounty_board.score_board：逐人分数一致）
+  [PASS] N4 关难度序（改按号排）：红项 1（期望 1）
+
+定点变异：PASS（逐条恰好命中期望红项）
+
+## stderr

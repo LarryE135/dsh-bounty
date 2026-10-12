@@ -1,0 +1,6 @@
+# cmd: python scripts/bounty_board.py --dry-run  (cwd=bare)
+# rc=2 secs=0.1
+## stdout
+
+## stderr
+[\u9519\u8bef] \u8f93\u5165\u4e0d\u53ef\u89e3\u6790\uff1a'charmap' codec can't encode characters in position 4-8: character maps to <undefined>
