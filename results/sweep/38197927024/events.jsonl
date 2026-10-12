@@ -1,0 +1,1 @@
+{"action": "expire", "actor": "schedule", "delta": -2, "difficulty": "easy", "formula": {"base": 1, "delta": -2, "kind": "timeout", "mult": -2, "rule": "v1.0"}, "from": "claimed", "holder": "LarryE135", "id": "evt_df9aeedfe099", "issue": 6, "reason": "@LarryE135 认领超时未交付，自动回板", "to": "open", "ts": "2026-10-12T02:58:56Z"}

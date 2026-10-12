@@ -1,0 +1,2 @@
+扫描 `bounty:claimed` 1 条：超期 1 条 → 回板
+APPLY #6 claimed → open ｜ @LarryE135 认领超时未交付，自动回板
