@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "easy", "from": "disputed", "holder": "LarryE135", "id": "evt_ef7e545a73d5", "issue": 9, "reason": "state_not_verifiable：当前态 `bounty:disputed` 不在待验收面", "to": "disputed", "ts": "2026-10-12T03:03:45Z"}

@@ -1,0 +1,1716 @@
+[
+ {
+  "id": 38198565402,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T9 回显半截标记 + 全角空格 + 换行载荷",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:08:13Z",
+  "run_started": "2026-10-12T03:08:13Z",
+  "updated": "2026-10-12T03:08:26Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:08:15Z",
+    "completed": "2026-10-12T03:08:25Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 380,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198543999,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T9 回显半截标记 + 全角空格 + 换行载荷",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:07:54Z",
+  "run_started": "2026-10-12T03:07:54Z",
+  "updated": "2026-10-12T03:08:08Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:07:56Z",
+    "completed": "2026-10-12T03:08:07Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 390,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198514640,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T9 回显半截标记 + 全角空格 + 换行载荷",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:07:28Z",
+  "run_started": "2026-10-12T03:07:28Z",
+  "updated": "2026-10-12T03:07:39Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:07:30Z",
+    "completed": "2026-10-12T03:07:38Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 390,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198494832,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T9 回显半截标记 + 全角空格 + 换行载荷",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:07:08Z",
+  "run_started": "2026-10-12T03:07:08Z",
+  "updated": "2026-10-12T03:07:16Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:07:10Z",
+    "completed": "2026-10-12T03:07:15Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38198453637,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] (重复建立，作废) T9 副本",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:06:31Z",
+  "run_started": "2026-10-12T03:06:31Z",
+  "updated": "2026-10-12T03:06:45Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:06:34Z",
+    "completed": "2026-10-12T03:06:44Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 363,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198391914,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T9 回显半截标记 + 全角空格 + 换行载荷",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:05:35Z",
+  "run_started": "2026-10-12T03:05:35Z",
+  "updated": "2026-10-12T03:05:51Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:05:38Z",
+    "completed": "2026-10-12T03:05:50Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 429,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198355534,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:05:05Z",
+  "run_started": "2026-10-12T03:05:05Z",
+  "updated": "2026-10-12T03:05:21Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:05:08Z",
+    "completed": "2026-10-12T03:05:20Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 408,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198335574,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6c 超上限后的串行认领（对照）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:04:47Z",
+  "run_started": "2026-10-12T03:04:47Z",
+  "updated": "2026-10-12T03:04:56Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:04:50Z",
+    "completed": "2026-10-12T03:04:55Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38198318850,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] (重复建立，作废) T9 副本",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:04:32Z",
+  "run_started": "2026-10-12T03:04:32Z",
+  "updated": "2026-10-12T03:04:49Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:04:35Z",
+    "completed": "2026-10-12T03:04:49Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 344,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198295562,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:04:12Z",
+  "run_started": "2026-10-12T03:04:12Z",
+  "updated": "2026-10-12T03:04:25Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:04:14Z",
+    "completed": "2026-10-12T03:04:24Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 408,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198256754,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:03:37Z",
+  "run_started": "2026-10-12T03:03:37Z",
+  "updated": "2026-10-12T03:03:51Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:03:39Z",
+    "completed": "2026-10-12T03:03:50Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 377,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198235203,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:03:17Z",
+  "run_started": "2026-10-12T03:03:17Z",
+  "updated": "2026-10-12T03:03:31Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:03:20Z",
+    "completed": "2026-10-12T03:03:30Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 371,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198203895,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:02:49Z",
+  "run_started": "2026-10-12T03:02:49Z",
+  "updated": "2026-10-12T03:03:04Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:02:52Z",
+    "completed": "2026-10-12T03:03:03Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 351,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198163693,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6a 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:02:13Z",
+  "run_started": "2026-10-12T03:02:13Z",
+  "updated": "2026-10-12T03:02:30Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:02:16Z",
+    "completed": "2026-10-12T03:02:29Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 356,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198133160,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6a 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:01:46Z",
+  "run_started": "2026-10-12T03:01:46Z",
+  "updated": "2026-10-12T03:02:02Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:01:49Z",
+    "completed": "2026-10-12T03:02:01Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 364,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198103543,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6c 超上限后的串行认领（对照）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:01:20Z",
+  "run_started": "2026-10-12T03:01:20Z",
+  "updated": "2026-10-12T03:01:34Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:01:22Z",
+    "completed": "2026-10-12T03:01:34Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 425,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198035259,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6a 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:00:26Z",
+  "run_started": "2026-10-12T03:00:26Z",
+  "updated": "2026-10-12T03:00:38Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:00:28Z",
+    "completed": "2026-10-12T03:00:37Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 342,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38198034976,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T6b 跨 issue 并发认领竞态",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T03:00:26Z",
+  "run_started": "2026-10-12T03:00:26Z",
+  "updated": "2026-10-12T03:00:38Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T03:00:28Z",
+    "completed": "2026-10-12T03:00:37Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 344,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38197977451,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T1 生命周期 + 标签首跑 + P0-2 重认领",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:59:39Z",
+  "run_started": "2026-10-12T02:59:39Z",
+  "updated": "2026-10-12T02:59:48Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:59:41Z",
+    "completed": "2026-10-12T02:59:47Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197974402,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T5 并发组排队被挤掉（issue-28）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:59:36Z",
+  "run_started": "2026-10-12T02:59:36Z",
+  "updated": "2026-10-12T02:59:58Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:59:52Z",
+    "completed": "2026-10-12T02:59:57Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197974000,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T5 并发组排队被挤掉（issue-28）",
+  "status": "completed",
+  "conclusion": "cancelled",
+  "created": "2026-10-12T02:59:35Z",
+  "run_started": "2026-10-12T02:59:35Z",
+  "updated": "2026-10-12T02:59:37Z",
+  "head_branch": "main",
+  "jobs": [],
+  "artifacts": []
+ },
+ {
+  "id": 38197972424,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T5 并发组排队被挤掉（issue-28）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:59:34Z",
+  "run_started": "2026-10-12T02:59:34Z",
+  "updated": "2026-10-12T02:59:51Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:59:37Z",
+    "completed": "2026-10-12T02:59:50Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 345,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38197826168,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3c 已关闭 issue 上的认领与超期",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:57:20Z",
+  "run_started": "2026-10-12T02:57:20Z",
+  "updated": "2026-10-12T02:57:27Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:57:22Z",
+    "completed": "2026-10-12T02:57:27Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197796790,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3c 已关闭 issue 上的认领与超期",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:56:53Z",
+  "run_started": "2026-10-12T02:56:53Z",
+  "updated": "2026-10-12T02:57:06Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:56:55Z",
+    "completed": "2026-10-12T02:57:05Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 343,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38197778390,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3b 标签 open 而标记 claimed 超期（sweep 初筛）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:56:35Z",
+  "run_started": "2026-10-12T02:56:35Z",
+  "updated": "2026-10-12T02:56:42Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:56:37Z",
+    "completed": "2026-10-12T02:56:41Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197743078,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3a 超期扫描 + 嫁祸持有者",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:56:03Z",
+  "run_started": "2026-10-12T02:56:03Z",
+  "updated": "2026-10-12T02:56:11Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:56:05Z",
+    "completed": "2026-10-12T02:56:10Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197716593,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3a 超期扫描 + 嫁祸持有者",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:55:39Z",
+  "run_started": "2026-10-12T02:55:39Z",
+  "updated": "2026-10-12T02:55:54Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:55:41Z",
+    "completed": "2026-10-12T02:55:53Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 344,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38197681926,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3d 超期 + 锁定（批量写失败探针）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:55:08Z",
+  "run_started": "2026-10-12T02:55:08Z",
+  "updated": "2026-10-12T02:55:18Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:55:11Z",
+    "completed": "2026-10-12T02:55:17Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ },
+ {
+  "id": 38197653363,
+  "wf": "bounty.yml",
+  "event": "issue_comment",
+  "title": "[audit-test] T3d 超期 + 锁定（批量写失败探针）",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T02:54:44Z",
+  "run_started": "2026-10-12T02:54:44Z",
+  "updated": "2026-10-12T02:55:01Z",
+  "head_branch": "main",
+  "jobs": [
+   {
+    "job": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T02:54:46Z",
+    "completed": "2026-10-12T02:55:01Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "size": 343,
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ }
+]

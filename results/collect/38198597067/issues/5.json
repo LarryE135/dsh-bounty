@@ -1,0 +1,20 @@
+{
+ "number": 5,
+ "state": "open",
+ "title": "[audit-test] T3b 标签 open 而标记 claimed 超期（sweep 初筛）",
+ "labels": [
+  "bounty",
+  "bounty:open",
+  "difficulty:medium"
+ ],
+ "comments_count": 1,
+ "comments": [
+  {
+   "id": 6116923087,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:56:31Z",
+   "body": "手写标记：claimed 且已超期（标签仍是 open）。\n<!-- bounty:v1 {\"state\":\"claimed\",\"holder\":\"victim-two\",\"due_at\":\"2026-10-01T00:00:00Z\",\"rounds\":0,\"seq\":3} -->"
+  }
+ ]
+}

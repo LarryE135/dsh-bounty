@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "easy", "from": "disputed", "holder": "LarryE135", "id": "evt_c586a4021878", "issue": 9, "reason": "holder_exists：已有持有者 @LarryE135（到期 2026-10-15T03:00:31Z）——先等其交付或超时回板", "to": "disputed", "ts": "2026-10-12T03:04:18Z"}
