@@ -1,0 +1,24 @@
+name: audit-collect
+on:
+  push:
+    branches: [audit-collect]
+permissions:
+  contents: write
+  issues: read
+  actions: read
+jobs:
+  c:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: collect
+        timeout-minutes: 15
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .audit/collect.py out
+      - name: push results
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .audit/push_results.sh out "collect/${{ github.run_id }}"
