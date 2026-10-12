@@ -1,0 +1,177 @@
+{
+ "env": {
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "executable": "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+  "preferred_encoding": "utf-8",
+  "fs_encoding": "utf-8",
+  "git_autocrlf": "",
+  "git_autocrlf_show": "",
+  "head": "b4c3d1b4322bc7dddff8b9a5a4067b60481911c4",
+  "crlf_scripts_bounty_board": [
+   0,
+   1807
+  ],
+  "crlf_tests_test_bounty_board": [
+   0,
+   879
+  ],
+  "crlf_site_index": [
+   0,
+   61
+  ],
+  "git_status_after": "?? out/"
+ },
+ "results": [
+  {
+   "set": "utf8",
+   "name": "test_bounty_board",
+   "rc": 0,
+   "secs": 0.7,
+   "stdout_sha1": "9380d3cfad7d",
+   "stdout_lines": 102,
+   "stderr_tail": [],
+   "stdout_last": "ALL OK（反面证明见 --mutate）"
+  },
+  {
+   "set": "utf8",
+   "name": "test_bounty_board_mutate",
+   "rc": 0,
+   "secs": 0.2,
+   "stdout_sha1": "6abf7c702935",
+   "stdout_lines": 2876,
+   "stderr_tail": [],
+   "stdout_last": "定点变异：PASS（逐条恰好命中期望红项）"
+  },
+  {
+   "set": "utf8",
+   "name": "test_build_site",
+   "rc": 0,
+   "secs": 0.5,
+   "stdout_sha1": "d1e9fc4a5d42",
+   "stdout_lines": 31,
+   "stderr_tail": [],
+   "stdout_last": "ALL OK（反面证明见 --mutate）"
+  },
+  {
+   "set": "utf8",
+   "name": "test_build_site_mutate",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "100fe0245491",
+   "stdout_lines": 107,
+   "stderr_tail": [],
+   "stdout_last": "定点变异：PASS（逐条恰好命中期望红项）"
+  },
+  {
+   "set": "utf8",
+   "name": "build_site_print",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "1adb43c61964",
+   "stdout_lines": 240,
+   "stderr_tail": [],
+   "stdout_last": "（--print：4 页未落盘；账本 0 条事件）"
+  },
+  {
+   "set": "utf8",
+   "name": "bounty_dry_run",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "1ba6904b867e",
+   "stdout_lines": 198,
+   "stderr_tail": [],
+   "stdout_last": "[OK] 离线演练走完：认领 → 交付 → 验收 → 结算 ＋ 超时回板 ＋ 拒绝面（重复认领 / 无据交付 / 非维护者裁决 / 并发上限）"
+  },
+  {
+   "set": "bare",
+   "name": "test_bounty_board",
+   "rc": 0,
+   "secs": 0.7,
+   "stdout_sha1": "9380d3cfad7d",
+   "stdout_lines": 102,
+   "stderr_tail": [],
+   "stdout_last": "ALL OK（反面证明见 --mutate）"
+  },
+  {
+   "set": "bare",
+   "name": "test_bounty_board_mutate",
+   "rc": 0,
+   "secs": 0.2,
+   "stdout_sha1": "6e49aea1d95f",
+   "stdout_lines": 2876,
+   "stderr_tail": [],
+   "stdout_last": "定点变异：PASS（逐条恰好命中期望红项）"
+  },
+  {
+   "set": "bare",
+   "name": "test_build_site",
+   "rc": 0,
+   "secs": 0.4,
+   "stdout_sha1": "d1e9fc4a5d42",
+   "stdout_lines": 31,
+   "stderr_tail": [],
+   "stdout_last": "ALL OK（反面证明见 --mutate）"
+  },
+  {
+   "set": "bare",
+   "name": "test_build_site_mutate",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "100fe0245491",
+   "stdout_lines": 107,
+   "stderr_tail": [],
+   "stdout_last": "定点变异：PASS（逐条恰好命中期望红项）"
+  },
+  {
+   "set": "bare",
+   "name": "build_site_print",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "1adb43c61964",
+   "stdout_lines": 240,
+   "stderr_tail": [],
+   "stdout_last": "（--print：4 页未落盘；账本 0 条事件）"
+  },
+  {
+   "set": "bare",
+   "name": "bounty_dry_run",
+   "rc": 0,
+   "secs": 0.1,
+   "stdout_sha1": "1ba6904b867e",
+   "stdout_lines": 198,
+   "stderr_tail": [],
+   "stdout_last": "[OK] 离线演练走完：认领 → 交付 → 验收 → 结算 ＋ 超时回板 ＋ 拒绝面（重复认领 / 无据交付 / 非维护者裁决 / 并发上限）"
+  }
+ ],
+ "site_compare": {
+  "rc": 0,
+  "stdout": "站点已生成：/tmp/site_r5_58t9y/（index.html, board.html, honor.html, rules.html；账本 0 条事件）\n",
+  "files": {
+   "board.html": {
+    "gen_crlf": 0,
+    "repo_crlf": 0,
+    "equal_raw": true,
+    "equal_lf": true
+   },
+   "honor.html": {
+    "gen_crlf": 0,
+    "repo_crlf": 0,
+    "equal_raw": true,
+    "equal_lf": true
+   },
+   "index.html": {
+    "gen_crlf": 0,
+    "repo_crlf": 0,
+    "equal_raw": true,
+    "equal_lf": true
+   },
+   "rules.html": {
+    "gen_crlf": 0,
+    "repo_crlf": 0,
+    "equal_raw": true,
+    "equal_lf": true
+   }
+  }
+ }
+}

@@ -1,0 +1,107 @@
+# cmd: python -X utf8 tests/test_bounty_board.py  (cwd=utf8)
+# rc=0 secs=0.7
+## stdout
+悬赏板状态机守卫（scripts/bounty_board.py · 纯逻辑层断言）
+==========================================================================
+[0] 命令解析：只认「命令在最前、行首」的词
+  [PASS] A1 行首 /claim 被识别
+  [PASS] A2 正文中间出现的命令不认（首行非命令即整条忽略）
+  [PASS] A3 无斜杠的 claim 不认（命令词表为准）
+  [PASS] A4 /deliver 载荷切出
+  [PASS] A5 前导空白容忍（行首态）
+  [PASS] A6 命令与载荷间无分隔符（`/claim：…`）不认——防近似词误触发
+[A] R3 · 入选标记与态（bounty 标签在 ∧ 态 ∈ {open, expired}）
+  [PASS] B1 无 `bounty` 标签 → 拒
+  [PASS] B2 态为 settled（非 open/expired）→ 拒（不可认领）
+  [PASS] B3 态为 open → 通过并上锁
+  [PASS] B4 态为 expired → 通过（回板窗口可认领）
+  [PASS] B5 有 `bounty` 无态标签 → 按 open 处置（试点口径，README 记载）
+[B] R1 · 无当前持有者（标记是权威记录：持有时标签可能仍为 open）
+  [PASS] C1 已有持有者 → 拒（理由点名持有者与到期）
+  [PASS] C1b 态与标记一致（claimed）→ 同样拒（持有者判据先于态判据）
+  [PASS] C2 无持有者 → 通过
+[C] R2 · 并发认领上限（默认 2）
+  [PASS] D1 缺省上限 = 2（Config 缺省值即口径真源）
+  [PASS] D2 已持有 1 个（未达上界）→ 通过
+  [PASS] D3 已持有 2 个（达上界）→ 拒
+  [PASS] D4 上限可配（=1 且已持有 1）→ 拒
+[D] R4 · 仅认领人可交付 / 释放
+  [PASS] E1 非持有者 /deliver → 拒
+  [PASS] E2 非持有者 /withdraw → 拒
+  [PASS] E3 持有者 /deliver → 通过（转 delivered，轮次 +1）
+  [PASS] E4 持有者 /withdraw → 通过（回板 open，清持有者与到期）
+[E] R5 · 交付必须带链接或证据块
+  [PASS] F1 空载荷且无围栏 → 拒
+  [PASS] F2 无链接无围栏的说明文字 → 拒
+  [PASS] F3 https 链接 → 通过
+  [PASS] F4 http 链接 → 通过
+  [PASS] F5 载荷无链接但正文带围栏证据块 → 通过
+[F] 生命周期与账本（验收 / 结算 / 轮次 / 超时回板 / 幂等 / 荣誉榜）
+  [PASS] G1 非维护者 /verify → 拒
+  [PASS] G2 态非 delivered 的 /verify → 拒
+  [PASS] G3 维护者 /verify pass → 通过（转 verified）
+  [PASS] G4 /verify fail → 回 claimed 返工且**不扣分**（v1.0：发布者不能凭一次不满扣分）
+  [PASS] G5 非维护者 /settle → 拒
+  [PASS] G6 态非 verified 的 /settle → 拒
+  [PASS] G7 维护者 /settle → 质量化按 medium 记 +6（rounds=1 ⇒ round=0 ⇒ 2×）
+  [PASS] G8 轮次用尽后再交付 → 判**无效交付**（转 disputed、记 −base）
+  [PASS] G9 超期 claimed → 回板 open 且事件记 −2×base（负分归属原持有者）
+  [PASS] G10 未超期 → 不动（sweep 空表）
+  [PASS] G11 账本按 id 幂等（同事件重复投递只入一次）
+  [PASS] G12 append-only：拒绝也留痕（delta=0）且不改写既有行
+  [PASS] G13 荣誉榜确定性：同账本两次生成逐字节相同
+  [PASS] G14 荣誉榜含贡献者与声誉分（alice +3 ／ bob 0）
+  [PASS] G15 被拒命令记在**尝试者**头上（bob 计 1 次被拒，不计入持有者 alice）
+  [PASS] G16 质量化三档：首交付 2×base ／ 中性 1×base ／ 返工 2/3×base（四档难度）
+  [PASS] G17 保底 max(1,·)：低 base × 高轮次时生效（quality_delta(1,5) == 1）
+  [PASS] G18 舍入 half-up：2.5→3 ／ 4.5→5（且与内置 round 分歧：2／4）
+  [PASS] G19 结算事件带 formula 快照（base/rounds/round/den/delta 齐备）
+  [PASS] G20 rescore 全等：按 formula 复算 == 落盘 delta
+  [PASS] G21 rescore 抓篡改：改 delta 必被点名（含事件 id）
+  [PASS] G22 /verify partial 3/5 → 转 verified 且标记带验收条目快照 [3,5]
+  [PASS] G23 E 进结算：hard base=6 × 2×(3/5) ÷ 2 = 3.6 → half_up 4
+  [PASS] G24 rescore 按 e_pass/e_total 复算一致
+  [PASS] G25 partial 数值非法/不可解析 → 拒（criteria_malformed）
+  [PASS] G26 E 快照参与结算：medium base=3 × 2×(1/2) ÷ 1 = 3
+  [PASS] G27 /verify pass → 清空 E 快照（E≡1）
+  [PASS] G28 /bid 投标 → 态保持 contest 且标记带投标人 [alice]
+  [PASS] G29 一人一投：同一人二次投标 → 拒（duplicate_bid）
+  [PASS] G30 投标截止后 → 拒（bid_deadline_passed）
+  [PASS] G31 非招标态 /bid → 拒（state_not_bidding）
+  [PASS] G32 /select 定标 → 转 delivered、holder=中标者、rounds=1（首交付）
+  [PASS] G33 落标者各一条落选事件：hard → 2 分（v0.4 表 0/1/2/4）
+  [PASS] G34 0 分落选也写事件（easy → delta=0；否则与「未投标」同形）
+  [PASS] G35 定标越权/非投标人/无投标 → 三种皆拒
+  [PASS] G36 落选分 rescore 一致（按难度表复算）
+  [PASS] G37 /appraise：态不变、标记与事件均带 impact、**delta 恒 0**（不参与计分）
+  [PASS] G38 未知等级 → 拒，且提示当前表（表可调）
+  [PASS] G39 价值评价无依据 → 拒（否则不可追溯）
+  [PASS] G40 非维护者 /appraise → 拒（人审闸）
+  [PASS] G41 **等级表可调**：换成甲乙丙丁后新等级生效、旧等级被拒、还原即恢复
+  [PASS] G42 impact 随状态迁移继承（verify 后的新标记仍带等级）
+  [PASS] G43 价值向量：按「贡献者×项目」聚合、字段齐、**且不含任何金额字段**（规格 V2：资金发生在站外，本站只做评价）
+  [PASS] G44 空账本 → 向量为空且不崩，注记保留
+  [PASS] G45 确定性：同账本两次导出逐字段相同；有 formula 的行 evidence_strength 为真
+[H] 真模式路由（假客户端：PR 评论／自带标记／非命令／计划不写／PR 元数据）
+  [PASS] I1 PR 评论 → 无动作（不写、不产事件）
+  [PASS] I2 悬赏板自身留言（含标记）→ 无动作（防自触发循环）
+  [PASS] I3 非命令评论 → 无动作
+  [PASS] I4 计划模式（缺 --apply）→ 不写任何远端状态
+  [PASS] I5 应用模式 → 加标签之一 ＋ 发一条评论（且标签体系就绪）
+  [PASS] I6 交付链接指向本仓 PR → 事件带 PR 元数据（pull-requests: read 那条腿）
+[G] 离线两模式自证（--dry-run ／ --state 真跑子进程）
+  [PASS] H1 --dry-run 退出码 0（离线演练可一键跑）
+  [PASS] H2 演练日志覆盖全部态迁移（claim→deliver→verify→settle ＋ 超时回板）
+  [PASS] H3 演练日志含账本段与荣誉榜段
+  [PASS] H4 演练为纯离线（不触网）：日志无 http 请求痕迹
+  [PASS] H5 --state 三腿全通（建题 / 认领 / 超时回板）
+  [PASS] H6 镜像落盘正确：标签回 bounty:open、历史含 claim→expire、账本 2 条
+  [PASS] H7 镜像看板可读（--state 无动作时打印各题一行）
+  [PASS] H8 账本收口：--ledger-append 生成带 _schema 的账本（2 条事件）
+  [PASS] H9 账本收口幂等：重复并入同批 JSONL 不增行
+  [PASS] H10 荣誉榜由账本生成（含贡献者行）
+==========================================================================
+通过 88 / 失败 0
+ALL OK（反面证明见 --mutate）
+
+## stderr
