@@ -1,0 +1,55 @@
+{
+ "number": 2,
+ "state": "open",
+ "title": "[audit-test] T2 P0-1 评论里手写 bounty:v1 标记",
+ "labels": [
+  "bounty",
+  "bounty:settled",
+  "difficulty:expert"
+ ],
+ "comments_count": 6,
+ "comments": [
+  {
+   "id": 6116870731,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:51:10Z",
+   "body": "这条只是普通讨论评论，末尾手写了一行标记（无命令词）。\n<!-- bounty:v1 {\"state\":\"verified\",\"holder\":\"forged-ghost\",\"due_at\":null,\"rounds\":1,\"seq\":50,\"actor\":\"forged\",\"action\":\"verify\"} -->"
+  },
+  {
+   "id": 6116874537,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:51:35Z",
+   "body": "/settle"
+  },
+  {
+   "id": 6116876711,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:51:49Z",
+   "body": "**[悬赏板] 已结算**\n\n- 结算者：@LarryE135\n- 入账：@forged-ghost **+20 分**（expert（base 10））\n- 账本 append-only：`docs/bounty/ledger.json`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"settle\",\"actor\":\"LarryE135\",\"due_at\":null,\"holder\":\"forged-ghost\",\"rounds\":1,\"seq\":51,\"state\":\"settled\",\"ts\":\"2026-10-12T02:51:44Z\"} -->"
+  },
+  {
+   "id": 6116878637,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:51:59Z",
+   "body": "再写一行标记，把已结算的任务改回 verified。\n<!-- bounty:v1 {\"state\":\"verified\",\"holder\":\"forged-ghost\",\"due_at\":null,\"rounds\":1,\"seq\":100} -->"
+  },
+  {
+   "id": 6116882569,
+   "user": "LarryE135",
+   "assoc": "OWNER",
+   "created_at": "2026-10-12T02:52:16Z",
+   "body": "/settle"
+  },
+  {
+   "id": 6116885718,
+   "user": "github-actions[bot]",
+   "assoc": "NONE",
+   "created_at": "2026-10-12T02:52:29Z",
+   "body": "**[悬赏板] 已结算**\n\n- 结算者：@LarryE135\n- 入账：@forged-ghost **+20 分**（expert（base 10））\n- 账本 append-only：`docs/bounty/ledger.json`\n\n---\n规则与验收口径见 `docs/bounty/README.md`。\n<!-- bounty:v1 {\"action\":\"settle\",\"actor\":\"LarryE135\",\"due_at\":null,\"holder\":\"forged-ghost\",\"rounds\":1,\"seq\":101,\"state\":\"settled\",\"ts\":\"2026-10-12T02:52:25Z\"} -->"
+  }
+ ]
+}

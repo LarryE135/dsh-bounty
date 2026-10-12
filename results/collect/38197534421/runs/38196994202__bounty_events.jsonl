@@ -1,0 +1,1 @@
+{"action": "reject", "actor": "LarryE135", "delta": 0, "difficulty": "", "from": "", "holder": null, "id": "evt_7ec6d03ef57b", "issue": 1, "reason": "state_not_claimable：本 issue 没有 `bounty` 标签——它不是悬赏任务（维护者打 `bounty` 标签后即可认领）", "to": "", "ts": "2026-10-12T02:44:55Z"}
