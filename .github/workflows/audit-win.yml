@@ -1,0 +1,29 @@
+name: audit-win
+on:
+  push:
+    branches: [audit-win]
+permissions:
+  contents: write
+jobs:
+  t:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: harness
+        shell: bash
+        timeout-minutes: 20
+        run: python -X utf8 .audit/win_harness.py "out/${{ matrix.os }}"
+      - name: push results
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .audit/push_results.sh out "win/${{ github.run_id }}"
