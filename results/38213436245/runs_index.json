@@ -1,0 +1,113 @@
+[
+ {
+  "id": 38213015063,
+  "event": "issue_comment",
+  "title": "[audit-test] rM-M2b 超长 /dispute（262144 字符）→ 机器人回评 422",
+  "status": "completed",
+  "conclusion": "success",
+  "created": "2026-10-12T06:32:23Z",
+  "updated": "2026-10-12T06:32:38Z",
+  "jobs": [
+   {
+    "name": "route",
+    "conclusion": "success",
+    "started": "2026-10-12T06:32:26Z",
+    "completed": "2026-10-12T06:32:38Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "success"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": [
+   {
+    "name": "bounty-ledger-events",
+    "files": [
+     "bounty_events.jsonl"
+    ]
+   }
+  ]
+ },
+ {
+  "id": 38213058946,
+  "event": "issue_comment",
+  "title": "[audit-test] rM-M2b 超长 /dispute（262144 字符）→ 机器人回评 422",
+  "status": "completed",
+  "conclusion": "failure",
+  "created": "2026-10-12T06:32:57Z",
+  "updated": "2026-10-12T06:36:33Z",
+  "jobs": [
+   {
+    "name": "route",
+    "conclusion": "failure",
+    "started": "2026-10-12T06:33:00Z",
+    "completed": "2026-10-12T06:36:33Z",
+    "steps": [
+     [
+      "Set up job",
+      "success"
+     ],
+     [
+      "Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Run actions/setup-python@v5",
+      "success"
+     ],
+     [
+      "路由（issue_comment 命令 ／ schedule 超时回板）",
+      "failure"
+     ],
+     [
+      "本批账本事件（artifact；供维护者并入账本）",
+      "success"
+     ],
+     [
+      "Post Run actions/setup-python@v5",
+      "skipped"
+     ],
+     [
+      "Post Run actions/checkout@v4",
+      "success"
+     ],
+     [
+      "Complete job",
+      "success"
+     ]
+    ]
+   }
+  ],
+  "artifacts": []
+ }
+]
